@@ -95,7 +95,7 @@
     <div class="main animate__animated animate__zoomInUp">
       <h1>Please Type An Integer Greater Than 0:</h1>
       <p>
-        <input type="text" bind:value={userInput} autofocus />
+        <input type="number" bind:value={userInput} autofocus />
         <button on:click={getFactors}>Go</button>
       </p>
     </div>
