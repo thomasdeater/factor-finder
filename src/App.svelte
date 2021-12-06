@@ -138,7 +138,7 @@
         {isPrime}
       </p>
       <p>
-        Type Or Press <button on:click={start} class="key">T</button> To Try Again!
+        Type Or Click On <button on:click={start} class="key">T</button> To Try Again!
       </p>
     </div>
   {/if}
@@ -147,7 +147,7 @@
     <div class="main animate__animated animate__zoomInUp">
       <h1 class="error">Error!</h1>
       <p>
-        Type Or Press <button on:click={start} class="key">T</button> To Try Again!
+        Type Or Click On <button on:click={start} class="key">T</button> To Try Again!
       </p>
     </div>
   {/if}
