@@ -264,8 +264,10 @@
   }
 
   @media only screen and (max-width: 700px) {
-    .factors {
+    .factors,
+    .pairs {
       font-size: 0.85rem;
+      max-height: 40vh;
     }
   }
 
