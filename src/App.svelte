@@ -5,13 +5,14 @@
   import { boom } from "./boom.js";
 
   let show = "welcome";
+  let ok = true;
 
   let userInput = "";
   $: int = parseInt(userInput, 10);
   $: formattedInt = int.toLocaleString();
   let f = [];
   $: isPrime =
-    f.length < 3 ? "This IS A Primed Number." : "This IS NOT A Primed Number.";
+    f.length < 3 ? "This IS A Prime Number." : "This IS NOT A Prime Number.";
   $: formattedList = f.map((n) => n.toLocaleString()).join(" • ");
 
   // $: console.log("factorlist", formattedList);
@@ -38,9 +39,24 @@
   };
 
   const getFactors = () => {
-    f = factors(int);
-    show = f.length ? "factors" : "error";
-    boom();
+    if (int > 1000000000) {
+      ok = window.confirm(
+        "It may take a long time to find the factors for such a large number. Are you sure you want to continue?"
+      );
+    }
+
+    if (ok) {
+      show = "loader";
+      window.setTimeout(() => {
+        console.time("Factoring " + int);
+        f = factors(int);
+        console.timeEnd("Factoring " + int);
+        show = f.length ? "factors" : "error";
+        boom();
+      }, 10);
+    } else {
+      ok = true;
+    }
   };
 
   const darkmode = () => {
@@ -55,9 +71,12 @@
 <svelte:window on:keypress={onKeyPress} />
 
 <div class="App">
-  <p class="loader">Please wait…</p>
+  {#if show === "loader"}
+    <p class="loader animate__animated animate__zoomInUp">Please wait…</p>
+  {/if}
+
   {#if show === "welcome"}
-    <div class="main  animate__animated animate__zoomInUp">
+    <div class="main animate__animated animate__zoomInUp">
       <h1>Hi And Welcome To Factor Finder.</h1>
       <p>
         Type Or Click On <button on:click={start} class="key">T</button> To Begin
@@ -73,7 +92,7 @@
   {/if}
 
   {#if show === "input"}
-    <div class="main  animate__animated animate__zoomInUp">
+    <div class="main animate__animated animate__zoomInUp">
       <h1>Please Type An Integer Greater Than 0:</h1>
       <p>
         <input type="text" bind:value={userInput} autofocus />
@@ -83,7 +102,7 @@
   {/if}
 
   {#if show === "factors"}
-    <div class="main  animate__animated animate__zoomInUp">
+    <div class="main animate__animated animate__zoomInUp">
       <h1>The Factors Of {formattedInt} Are:</h1>
       <p class="factors">{formattedList}</p>
       <p>
@@ -96,7 +115,7 @@
   {/if}
 
   {#if show === "error"}
-    <div class="main  animate__animated animate__zoomInUp">
+    <div class="main animate__animated animate__zoomInUp">
       <h1 class="error">Error!</h1>
       <p>
         Type Or Press <button on:click={start} class="key">T</button> To Try Again!
@@ -125,5 +144,20 @@
     .factors {
       font-size: 0.85rem;
     }
+  }
+
+  .error {
+    color: darkred;
+  }
+
+  .loader {
+    color: darkred;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin-top: -33px;
+    font-size: 44px;
   }
 </style>

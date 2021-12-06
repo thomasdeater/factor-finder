@@ -13,10 +13,5 @@ export function factors(n) {
       o--;
     }
   }
-  return unique(f);
-}
-
-function unique(f) {
-  f = [...new Set(f)];
-  return f.sort((a, b) => a - b);
+  return [...new Set(f)].sort((a, b) => a - b);
 }
