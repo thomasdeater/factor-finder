@@ -3,14 +3,17 @@ export function factors(n) {
     return [];
   }
   let f = [1, n];
-  let o = Math.floor(n / 2);
 
-  if (n >= 4) {
-    while (o > 1) {
-      if (n % o === 0) {
-        f.push(o);
+  if (n > 3) {
+    let i = 2;
+    let j = Math.sqrt(n);
+
+    while (i <= j) {
+      if (n % i === 0) {
+        f.push(i);
+        f.push(n / i);
       }
-      o--;
+      i++;
     }
   }
   return [...new Set(f)].sort((a, b) => a - b);

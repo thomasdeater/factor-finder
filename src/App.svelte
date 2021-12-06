@@ -5,7 +5,7 @@
   import { boom } from "./boom.js";
 
   let show = "welcome";
-  let ok = true;
+  let message = "";
   let showCursor = true;
 
   let userInput = "";
@@ -25,9 +25,14 @@
 
   // $: console.log("formatted input", formattedInt);
 
-  const onKeyPress = (e) => {
+  const onKeyDown = (e) => {
+    console.log("keycode", e.keyCode);
     if (e.keyCode === 13 && show === "input") {
+      e.preventDefault();
       getFactors();
+    } else if (e.keyCode === 37 && show === "input") {
+      // ignore left arrow key
+      e.preventDefault();
     } else if (e.key === "t") {
       e.preventDefault();
       start();
@@ -50,28 +55,29 @@
 
   const start = () => {
     userInput = "";
+    message = "";
     showCursor = true;
     show = "input";
   };
 
   const getFactors = () => {
-    if (int > 1000000000) {
-      ok = window.confirm(
-        "It may take a long time to find the factors for such a large number. Are you sure you want to continue?"
-      );
-    }
-
-    if (ok) {
+    if (int > Number.MAX_SAFE_INTEGER) {
+      message = "That Number Is Too Large.";
+      show = "error";
+    } else {
       show = "loader";
       window.setTimeout(() => {
         console.time("Factoring " + int);
         f = factors(int);
         console.timeEnd("Factoring " + int);
-        show = f.length ? "factors" : "error";
-        boom();
+        if (f.length) {
+          show = "factors";
+          boom();
+        } else {
+          message = "Invalid Number.";
+          show = "error";
+        }
       }, 10);
-    } else {
-      ok = true;
     }
   };
 
@@ -84,7 +90,7 @@
   };
 </script>
 
-<svelte:window on:keypress={onKeyPress} />
+<svelte:window on:keydown={onKeyDown} />
 
 <div class="App">
   {#if show === "loader"}
@@ -146,6 +152,7 @@
   {#if show === "error"}
     <div class="main animate__animated animate__zoomInUp">
       <h1 class="error">Error!</h1>
+      <p>{message}</p>
       <p>
         Type Or Click On <button on:click={start} class="key">T</button> To Try Again!
       </p>
