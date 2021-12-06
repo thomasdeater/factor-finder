@@ -6,7 +6,7 @@ export function factors(n) {
 
   if (n > 3) {
     let i = 2;
-    let j = Math.sqrt(n);
+    let j = Math.sqrt(n) + 1;
 
     while (i <= j) {
       if (n % i === 0) {

@@ -27,10 +27,9 @@
     "</span>";
   $: formattedPairs = getFactorPairs([...f]);
 
-  // $: console.log("formatted input", formattedInt);
+  // $: console.log("num factors", f.length);
 
   const onKeyDown = (e) => {
-    console.log("keycode", e.keyCode);
     if (e.keyCode === 13 && show === "input") {
       e.preventDefault();
       getFactors();
@@ -241,6 +240,12 @@
     color: black;
     cursor: pointer;
     padding: 3px 5px;
+  }
+
+  .factors,
+  .pairs {
+    max-height: 60vh;
+    overflow: auto;
   }
 
   :global(.pairs span, .factors span) {
