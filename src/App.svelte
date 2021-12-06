@@ -6,17 +6,24 @@
 
   let show = "welcome";
   let ok = true;
+  let showCursor = true;
 
   let userInput = "";
+  let cursor = "|";
   $: int = parseInt(userInput, 10);
-  $: formattedInt = int.toLocaleString();
+  $: formattedInt = isNaN(int) ? "" : int.toLocaleString();
+  $: formattedWithCursor = formattedInt + cursor;
+
+  window.setInterval(() => {
+    cursor = showCursor && cursor === "" ? "|" : "";
+  }, 400);
+
   let f = [];
   $: isPrime =
     f.length < 3 ? "This IS A Prime Number." : "This IS NOT A Prime Number.";
   $: formattedList = f.map((n) => n.toLocaleString()).join(" • ");
 
-  // $: console.log("factorlist", formattedList);
-  // $: console.log("user input", userInput);
+  // $: console.log("formatted input", formattedInt);
 
   const onKeyPress = (e) => {
     if (e.keyCode === 13 && show === "input") {
@@ -33,8 +40,17 @@
     }
   };
 
+  const handleBlur = () => {
+    showCursor = false;
+  };
+
+  const handleFocus = () => {
+    showCursor = true;
+  };
+
   const start = () => {
     userInput = "";
+    showCursor = true;
     show = "input";
   };
 
@@ -95,7 +111,20 @@
     <div class="main animate__animated animate__zoomInUp">
       <h1>Please Type An Integer Greater Than 0:</h1>
       <p>
-        <input type="number" bind:value={userInput} autofocus />
+        <input
+          style="opacity: 0; position: absolute;"
+          type="number"
+          bind:value={userInput}
+          on:blur={handleBlur}
+          on:focus={handleFocus}
+          autofocus
+        />
+        <input
+          type="text"
+          bind:value={formattedWithCursor}
+          tabindex="-1"
+          readonly
+        />
         <button on:click={getFactors}>Go</button>
       </p>
     </div>
