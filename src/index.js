@@ -1,27 +1,29 @@
-import {factors} from './factors.js';
-import {print} from './print.js';
-import {boom} from './boom.js';
+import App from "./App.svelte";
 
-print('<div class="main"><h1>Hi And Welcome To Factor Finder.</h1> <p>Hit The <strong class="key">T</strong> On Your Keyboard (or <a href="#" onclick="window.start();return false;">click here</a>) To Begin Finding Factors! (This Is For Learning.)</p><p>Hit The <strong class="key">D</strong> On Your Keyboard For Dark Mode, Or The <strong class="key">L</strong> For Light Mode.</div>');
+let app = new App({
+  target: document.body,
+});
+
+export default app;
 
 let loader = document.querySelector('.loader');
 
-let body = document.querySelector('body');
+let body = document.body;
 
-document.addEventListener('keyup', e => {
-  if (e.key === 't') {
-    start();
-  } else if (e.key === 'd') {
-    body.classList = 'darkmode';
-  } else if (e.key === 'l') {
-    body.classList = 'lightmode';
-  }
-});
+// document.addEventListener('keyup', e => {
+//   if (e.key === 't') {
+//     start();
+//   } else if (e.key === 'd') {
+//     body.classList = 'darkmode';
+//   } else if (e.key === 'l') {
+//     body.classList = 'lightmode';
+//   }
+// });
 
-window.start = function start() {
-  document.getElementById('app').innerHTML = '';
-  window.setTimeout(run, 100);
-}
+// window.start = function start() {
+//   document.getElementById('app').innerHTML = '';
+//   window.setTimeout(run, 100);
+// }
 
 function formatList(list) {
   list = list.map(n => n.toLocaleString())
