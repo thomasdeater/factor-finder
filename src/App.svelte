@@ -21,7 +21,11 @@
   let f = [];
   $: isPrime =
     f.length < 3 ? "This IS A Prime Number." : "This IS NOT A Prime Number.";
-  $: formattedList = f.map((n) => n.toLocaleString()).join(" • ");
+  $: formattedList =
+    "<span>" +
+    f.map((n) => n.toLocaleString()).join("</span><span>") +
+    "</span>";
+  $: formattedPairs = getFactorPairs([...f]);
 
   // $: console.log("formatted input", formattedInt);
 
@@ -33,6 +37,12 @@
     } else if (e.keyCode === 37 && show === "input") {
       // ignore left arrow key
       e.preventDefault();
+    } else if (e.key === "p" && show === "factors") {
+      e.preventDefault();
+      showPairs();
+    } else if (e.key === "f" && show === "pairs") {
+      e.preventDefault();
+      showFactors();
     } else if (e.key === "t") {
       e.preventDefault();
       start();
@@ -79,6 +89,31 @@
         }
       }, 10);
     }
+  };
+
+  const getFactorPairs = (factors) => {
+    let p = [];
+
+    while (factors.length > 1) {
+      let a = factors.shift().toLocaleString();
+      let b = factors.pop().toLocaleString();
+      p.push(a + " x " + b);
+    }
+
+    if (factors.length) {
+      let a = factors.shift().toLocaleString();
+      p.push(a + " x " + a);
+    }
+
+    return "<span>" + p.join("</span><span>") + "</span>";
+  };
+
+  const showPairs = () => {
+    show = "pairs";
+  };
+
+  const showFactors = () => {
+    show = "factors";
   };
 
   const darkmode = () => {
@@ -139,9 +174,27 @@
   {#if show === "factors"}
     <div class="main animate__animated animate__zoomInUp">
       <h1>The Factors Of {formattedInt} Are:</h1>
-      <p class="factors">{formattedList}</p>
+      <p class="factors">{@html formattedList}</p>
       <p>
         {isPrime}
+      </p>
+      <p>
+        Type Or Click On <button on:click={showPairs} class="key">P</button> To Show
+        Factor Pairs.
+      </p>
+      <p>
+        Type Or Click On <button on:click={start} class="key">T</button> To Try Again!
+      </p>
+    </div>
+  {/if}
+
+  {#if show === "pairs"}
+    <div class="main animate__animated animate__zoomInUp">
+      <h1>The Factor Pairs Of {formattedInt} Are:</h1>
+      <p class="factors pairs">{@html formattedPairs}</p>
+      <p>
+        Type Or Click On <button on:click={showFactors} class="key">F</button> To
+        Show Factors.
       </p>
       <p>
         Type Or Click On <button on:click={start} class="key">T</button> To Try Again!
@@ -161,6 +214,11 @@
 </div>
 
 <style>
+  :global(body.darkmode) {
+    color: rgba(255, 255, 255, 0.7);
+    background-color: black;
+  }
+
   .App {
     width: 100%;
     height: 100%;
@@ -174,6 +232,30 @@
     max-width: 800px;
     display: block;
     text-align: center;
+  }
+
+  .key {
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 4px;
+    color: black;
+    cursor: pointer;
+    padding: 3px 5px;
+  }
+
+  :global(.pairs span, .factors span) {
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 4px;
+    color: black;
+    display: inline-block;
+    margin: 2px 3px;
+    padding: 2px 3px;
+  }
+
+  :global(.darkmode .key, .darkmode .factors span, .darkmode .pairs span) {
+    border-color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.7);
   }
 
   @media only screen and (max-width: 700px) {
