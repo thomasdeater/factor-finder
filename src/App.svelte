@@ -165,7 +165,7 @@
           tabindex="-1"
           readonly
         />
-        <button on:click={getFactors}>Go</button>
+        <button on:click={getFactors} class="go">Go</button>
       </p>
     </div>
   {/if}
@@ -239,7 +239,15 @@
     border-radius: 4px;
     color: black;
     cursor: pointer;
+    font-size: 1.2rem;
     padding: 3px 5px;
+  }
+
+  :global(.main input) {
+    font-size: 3rem;
+    border: none;
+    background: transparent;
+    color: darkred;
   }
 
   .factors,
@@ -256,6 +264,14 @@
     display: inline-block;
     margin: 2px 3px;
     padding: 2px 3px;
+  }
+
+  .go {
+    background: darkred;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 3rem;
   }
 
   :global(.darkmode .key, .darkmode .factors span, .darkmode .pairs span) {
