@@ -33,16 +33,13 @@
     if (e.keyCode === 13 && show === "input") {
       e.preventDefault();
       getFactors();
-    } else if (e.keyCode === 37 && show === "input") {
-      // ignore left arrow key
-      e.preventDefault();
     } else if (e.key === "p" && show === "factors") {
       e.preventDefault();
       showPairs();
     } else if (e.key === "f" && show === "pairs") {
       e.preventDefault();
       showFactors();
-    } else if (e.key === "t") {
+    } else if (e.key === "t" && show !== "input") {
       e.preventDefault();
       start();
     } else if (e.key === "d") {
@@ -60,6 +57,10 @@
 
   const handleFocus = () => {
     showCursor = true;
+  };
+
+  const enforceNumbers = (e) => {
+    if (!e.key.match(/[0-9]|backspace/i)) e.preventDefault();
   };
 
   const start = () => {
@@ -152,9 +153,10 @@
       <h1>Please Type An Integer Greater Than 0:</h1>
       <p>
         <input
-          style="opacity: 0; position: absolute;"
+          class="hidden"
           type="number"
           bind:value={userInput}
+          on:keydown={enforceNumbers}
           on:blur={handleBlur}
           on:focus={handleFocus}
           autofocus
@@ -248,6 +250,11 @@
     border: none;
     background: transparent;
     color: darkred;
+  }
+
+  .hidden {
+    opacity: 0;
+    position: absolute;
   }
 
   .factors,
